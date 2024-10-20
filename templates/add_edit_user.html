@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ is_edit|yesno:"Modifier l'utilisateur,Ajouter un nouvel utilisateur" }}{% endblock %}
+
+{% block content %}
+<style>
+    .container2 {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    form {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: calc(100% - 35px); /* Ajustement pour l'icône */
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 16px;
+        margin-bottom: 15px;
+    }
+
+    .password-toggle {
+        position: relative;
+    }
+
+    .password-toggle .toggle-password {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #aaa;
+        z-index: 1;
+    }
+
+    .password-toggle .toggle-password.active {
+        color: #007bff;
+    }
+
+    button[type="submit"],
+    .btn-action {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        text-decoration: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-right: 10px; /* Espacement entre les boutons */
+        font-size: 16px;
+    }
+
+    button[type="submit"]:hover,
+    .btn-action:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-cancel {
+        background-color: #dc3545;
+    }
+
+    .btn-cancel:hover {
+        background-color: #c82333;
+    }
+
+    /* Style pour la boîte de dialogue */
+    .dialog-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .dialog-box {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        text-align: center;
+    }
+
+    .dialog-box p {
+        margin-bottom: 15px;
+    }
+
+    .dialog-box button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-top: 10px;
+    }
+
+    .dialog-box button:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<br><br><br><br><br><br><br>
+<div class="container2">
+    <h1>{{ is_edit|yesno:"Modifier l'utilisateur,Ajouter un nouvel utilisateur" }}</h1>
+    {% if error_message %}
+        <div class="error-message" style="color: red;">{{ error_message }}</div>
+    {% endif %}
+    <form id="user-form" method="post" onsubmit="return validateForm()">
+        {% csrf_token %}
+        <label for="username">Nom d'utilisateur:</label>
+        <input type="text" id="username" name="username" value="{{ user.username|default_if_none:'' }}" required>
+        
+        <div class="password-toggle">
+            <label for="password">Mot de passe:</label>
+            <div class="input-group">
+                <input type="password" id="password" name="password" class="password-input" required>
+                <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('password')"></i>
+            </div>
+        </div>
+        
+        <div class="password-toggle">
+            <label for="confirm_password">Confirmer le mot de passe:</label>
+            <div class="input-group">
+                <input type="password" id="confirm_password" name="confirm_password" class="password-input" required>
+                <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('confirm_password')"></i>
+            </div>
+        </div>
+        
+  
+        <input type="hidden" id="role" name="role" value="user">
+        
+        <button type="submit" class="btn-action">{{ is_edit|yesno:"Enregistrer les modifications,Ajouter l'utilisateur" }}</button>
+        <a href="{% url 'users_list' %}" class="btn-action">Annuler</a>
+    </form>
+
+    <!-- Boîte de dialogue pour afficher les erreurs -->
+    <div class="dialog-overlay" id="error-dialog">
+        <div class="dialog-box">
+            <p id="error-message"></p>
+            <button onclick="closeErrorDialog()">OK</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+
+<script>
+    function togglePasswordVisibility(inputId) {
+        var passwordInput = document.getElementById(inputId);
+        var icon = passwordInput.nextElementSibling;
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.add('active');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('active');
+        }
+    }
+
+    function validateForm() {
+        var password = document.getElementById('password').value;
+        var confirm_password = document.getElementById('confirm_password').value;
+        var errorMessage = "";
+
+        if (password.length < 6) {
+            errorMessage += "Le mot de passe doit contenir au moins 6 caractères.<br>";
+        }
+
+        if (password !== confirm_password) {
+            errorMessage += "Les mots de passe ne correspondent pas.";
+        }
+
+        if (errorMessage !== "") {
+            // Afficher l'erreur dans la boîte de dialogue
+            document.getElementById('error-message').innerHTML = errorMessage;
+            document.getElementById('error-dialog').style.display = 'flex';
+            return false;
+        }
+
+        return true;
+    }
+
+    function closeErrorDialog() {
+        document.getElementById('error-dialog').style.display = 'none';
+    }
+</script>
+
+{% endblock %}

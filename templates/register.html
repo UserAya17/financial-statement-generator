@@ -1,0 +1,19 @@
+
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="container1">
+    <h1>Register</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <div class="btn-container1">
+            <button type="submit" class="btn">Register</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

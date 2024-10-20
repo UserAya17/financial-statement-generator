@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Upload File{% endblock %}
+
+{% block content %}
+<style> 
+    .image-text-container {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+    }
+    
+    .image {
+        max-width: 600px; /* Adjust the size of the image */
+        margin-right: 20px; /* Space between the image and text */
+    }
+    
+    .text {
+        flex: 1; /* This allows the text to take up the remaining space */
+    }
+    
+    .titre {
+        margin: 0;
+        font-size: 24px;
+    }
+    
+    p {
+        margin: 0;
+        font-size: 16px;
+    }
+    .etat {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333333;
+    }
+    .content-wrapper {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+        color: #0056b3;
+    }
+    .paragraph {
+        margin-bottom: 1em;
+    }
+    em {
+        font-style: normal;
+        font-weight: bold;
+        color: #0056b3;
+    }
+    .image-container {
+        background-color: #fff;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+<br><br><br><br><br><br>
+<h1 class="etat">ÉTAT COMPTABLE</h1>
+<div class="image-container">
+    <div class="image-text-container">
+        <img src="{% static 'images/excelimage.png' %}" alt="Image" class="image">
+        <div class="text">
+            <h1 class="titre">Présentation du Document</h1>
+            <p>
+                Ce fichier Excel intitulé "SITUATION COMPTABLE AU 31-Dec-23" présente un état comptable détaillé d'un établissement dont le nom est "XXX XXXX XXXXX". Ce document est structuré de manière à fournir une vue d'ensemble des amortissements, provisions, et montants nets classés par résidents et non-résidents, en dirhams et devises, exprimés en milliers de DH.
+                <br><br>
+                Les principales sections du fichier comprennent :
+                <br><br>
+                1. <strong>En-tête du document :</strong>Nom de l'établissement,Date de référence,Code établissement, date, code document, code monnaie, et folio
+                <br>
+                2. <strong>Tableau des données financières :</strong>Code ligne,Descriptions des lignes,Colonnes de données
+                <br>
+                3. <strong>Feuilles de calcul :</strong>Le fichier contient plusieurs onglets en bas pour organiser les différentes sections de l'état financier(par exemple, Actif), et divers états numérotés (par exemple, Etats 005). 
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="content-wrapper">
+    <h2>Fichiers d'échange </h2>
+    <p class="paragraph">
+        <strong>• Remise :</strong> une remise est un fichier qui contient les documents à déclarer par les établissements de crédit.
+    </p>
+    <p class="paragraph">
+        <strong>• CMPT_R :</strong> Un Compte-Rendu est un fichier créé par Bank Al-Maghrib suite aux contrôles effectués sur une remise pour indiquer l’acceptation ou le rejet de la remise et éventuellement la liste des erreurs décelées dans la remise.
+    </p>
+    <p class="paragraph">
+        Lors de la vérification des fichiers, il est important de suivre des règles strictes pour garantir la conformité et la précision des données. Ces règles se divisent en trois types principaux : les règles verticales, les règles horizontales et les règles inter documents.
+    </p>
+    <h2>Règles de contrôle :</h2>
+    <p class="paragraph">
+        <strong>Les règles verticales :</strong> sont appliquées au sein d'un même document. Elles vérifient que les montants ou les valeurs dans une colonne respectent des équations spécifiques. Par exemple, dans le document 001, certaines sommes de montants doivent égaler d'autres montants dans différentes lignes du même document. Voici un exemple de règle :
+    </p>
+    <p class="paragraph">
+        DOC 001, Règle 1 : A000(mon:3) = A010(mon:3) + A100(mon:3) + A200(mon:3) + A300(mon:3) + A410(mon:3) + A430(mon:3) + A700(mon:3) + A800(mon:3) + A900(mon:3) + A450(mon:3)
+    </p>
+    <p class="paragraph">
+        <strong>Les règles horizontales :</strong> se concentrent sur les lignes d'un document. Elles vérifient que les valeurs dans les colonnes d'une ligne respectent des équations spécifiques, souvent des sommes. Par exemple, dans plusieurs documents, certaines colonnes doivent être la somme d'autres colonnes de la même ligne. Voici un exemple de règle :
+    </p>
+    <p class="paragraph">
+        DOC 001, Règle 1 : 6 = 2 + 3 + 4 + 5
+    </p>
+    <p class="paragraph">
+        <strong>Les règles inter documents :</strong> sont appliquées entre plusieurs documents. Elles vérifient que certaines valeurs dans un document correspondent à des valeurs spécifiques dans d'autres documents. Par exemple, des montants spécifiques dans le document 001 doivent égaler la somme de montants dans les documents 007 et 009. Voici un exemple de règle :
+        </p>
+        <p class="paragraph">
+            DOC 001, Règle 9 : A230[Doc: 001][mon:3][Col: 2] = A610[Doc: 005][mon:1][Col: 4]
+        </p>
+        <p class="paragraph">
+            Ces règles de vérification garantissent l'intégrité et la cohérence des données transmises, que ce soit au sein d'un même document, au niveau des lignes, ou entre différents documents. Elles sont essentielles pour assurer la fiabilité des informations et faciliter leur traitement ultérieur.
+        </p>
+    </div>
+    
+    {% endblock %}
+    

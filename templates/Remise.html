@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload File{% endblock %}
+
+{% block content %}
+<style>
+    .container1 {
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333333;
+    }
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+    select, input[type="file"], input[type="submit"] {
+        width: calc(100% - 24px);
+        padding: 12px;
+        margin-bottom: 20px;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 16px;
+    }
+    .btn-container1 {
+        text-align: center;
+    }
+    .btn {
+        padding: 12px 24px;
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+        background-color: #0056b3;
+    }
+    .download-link a {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    .download-link a:hover {
+        text-decoration: underline;
+    }
+</style>
+<br><br><br>
+<div class="container1">
+    <h1>TRAITEMENT DE FICHIER REMISE</h1>
+    <form action="{% url 'add' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <label for="mois">Mois :</label>
+        <select name="mois" id="mois" required>
+            <option value="01">Janvier</option>
+            <option value="02">Février</option>
+            <option value="03">Mars</option>
+            <option value="04">Avril</option>
+            <option value="05">Mai</option>
+            <option value="06">Juin</option>
+            <option value="07">Juillet</option>
+            <option value="08">Août</option>
+            <option value="09">Septembre</option>
+            <option value="10">Octobre</option>
+            <option value="11">Novembre</option>
+            <option value="12">Décembre</option>
+        </select>
+        
+        <label for="annee">Année :</label>
+        <select name="annee" id="annee" required></select>
+        
+        <label for="annee">Importer le fichier Excel :</label>
+        <input type="file" name="file" required>
+        <div class="btn-container1">
+            <input type="submit" value="Traiter" class="btn">
+        </div>
+    </form>
+
+    <!-- {% if preview %}
+        <p>{{ preview }}</p>
+        <div class="download-link">
+            <a href="{% url 'download_file' filename=preview nomf=nom %}">Télécharger le fichier</a>
+        </div>
+    {% endif %} -->
+
+    <script>
+        // Get the current year
+        var currentYear = new Date().getFullYear();
+        var selectYear = document.getElementById("annee");
+
+        // Populate the year dropdown dynamically from the current year to 1990
+        for (var i = currentYear; i >= 1990; i--) {
+            var option = document.createElement("option");
+            option.value = i;
+            option.text = i;
+            selectYear.appendChild(option);
+        }
+    </script>
+</div>
+
+{% endblock %}

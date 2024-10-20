@@ -1,0 +1,154 @@
+<!-- Etat.html -->
+
+{% extends 'base.html' %}
+{% block content %}
+<style>
+/* Styles CSS */
+.container3 {
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+#searchInput {
+    margin-bottom: 10px;
+}
+
+#collectionsTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#collectionsTable th, #collectionsTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#collectionsTable th {
+    background-color: #f2f2f2;
+}
+
+#paginationButtons {
+    margin-top: 10px;
+}
+
+#paginationButtons button {
+    margin-right: 10px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
+
+#paginationButtons button:hover {
+    background-color: #45a049;
+}
+</style>
+
+<br><br><br><br><br><br>
+<div class="container3">
+    <h1>Liste des des états comptables </h1>
+    
+    <input type="text" id="searchInput" placeholder="Rechercher...">
+    <span id="resultCount"></span> résultats trouvés.
+    
+    <table id="collectionsTable">
+        <thead>
+            <tr>
+                <th>Nom de l'états comptable /th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for collection in collections %}
+            <tr>
+                <td>{{ collection }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div id="paginationButtons">
+        <button id="prevBtn">Précédent</button>
+        <button id="nextBtn">Suivant</button>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Pagination and search functionality
+    const table = document.getElementById('collectionsTable');
+    const searchInput = document.getElementById('searchInput');
+    const paginationButtons = document.getElementById('paginationButtons');
+    const rowsPerPage = 20;
+    let currentPage = 0;
+    let filteredRows = Array.from(table.getElementsByTagName('tr')).slice(1);
+
+    function filterRows() {
+        const filter = searchInput.value.toUpperCase();
+        const rows = table.getElementsByTagName('tr');
+
+        filteredRows = [];
+
+        for (let i = 1; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            let shouldDisplay = false;
+
+            for (let j = 0; j < cells.length; j++) {
+                const cellText = cells[j].innerText.toUpperCase();
+                if (cellText.indexOf(filter) > -1) {
+                    shouldDisplay = true;
+                    break;
+                }
+            }
+
+            rows[i].style.display = shouldDisplay ? '' : 'none';
+            if (shouldDisplay) {
+                filteredRows.push(rows[i]);
+            }
+        }
+
+        updateResultCount();
+        currentPage = 0;
+        showPage(currentPage);
+    }
+
+    function updateResultCount() {
+        const countElement = document.getElementById('resultCount');
+        countElement.textContent = filteredRows.length;
+    }
+
+    function showPage(page) {
+        const startIndex = page * rowsPerPage;
+        const endIndex = startIndex + rowsPerPage;
+        const rows = filteredRows;
+
+        for (let i = 0; i < rows.length; i++) {
+            rows[i].style.display = (i >= startIndex && i < endIndex) ? '' : 'none';
+        }
+    }
+
+    function previousPage() {
+        if (currentPage > 0) {
+            currentPage--;
+            showPage(currentPage);
+        }
+    }
+
+    function nextPage() {
+        const maxPage = Math.ceil(filteredRows.length / rowsPerPage) - 1;
+        if (currentPage < maxPage) {
+            currentPage++;
+            showPage(currentPage);
+        }
+    }
+
+    searchInput.addEventListener('keyup', filterRows);
+    showPage(currentPage);
+
+    // Boutons de pagination
+    document.getElementById('prevBtn').addEventListener('click', previousPage);
+    document.getElementById('nextBtn').addEventListener('click', nextPage);
+});
+</script>
+{% endblock %}

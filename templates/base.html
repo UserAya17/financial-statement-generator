@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+   <html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+      <!--=============== REMIXICONS ===============-->
+      <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+
+      <!--=============== CSS ===============-->
+      <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
+      <title>Menu</title>
+   </head>
+   <body>
+      =============== HEADER ===============
+      <header class="header">
+         <nav class="nav container">
+            <div class="nav__data">
+               <!-- <a href="{% url 'home' %}" class="nav__logo">
+                  <i class="ri-home-5-line"></i> Acceuil 
+               </a> -->
+               
+               <div class="nav__toggle" id="nav-toggle">
+                  <i class="ri-menu-line nav__burger"></i>
+                  <i class="ri-close-line nav__close"></i>
+               </div>
+            </div>
+
+            <!--=============== NAV MENU ===============-->
+            <div class="nav__menu" id="nav-menu">  
+               <ul class="nav__list">
+                  <li><a href="{% url 'home' %}" class="nav__link"><i class="ri-home-5-line"></i>Acceuil </a></li>
+                  <li><a href="{% url 'remise' %}" class="nav__link">Remise</a></li>
+
+                  <li><a href="{% url 'ComptreRendu' %}" class="nav__link">Compte rendu</a></li>
+
+                  <!--=============== DROPDOWN 1 ===============-->
+                  <li class="dropdown__item">
+                     <div class="nav__link">
+                        Règle de contrôle <i class="ri-arrow-down-s-line dropdown__arrow"></i>
+                     </div>
+
+                     <ul class="dropdown__menu">
+                        <li>
+                           <a href="{% url 'Verticale' %}" class="dropdown__link">
+                              <i class="ri-layout-2-line"></i> Verticale
+                           </a>                          
+                        </li>
+                        
+                        <li>
+                           <a href="{% url 'Horizontale' %}" class="dropdown__link">
+                              <i class="ri-layout-column-line"></i> Horizontale
+                           </a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'InterDocument' %}" class="dropdown__link">
+                               <i class="ri-file-text-line"></i> Inter document
+                            </a>
+                         </li>
+                     </ul>
+                  </li>
+                  
+                  <li><a href="{% url 'Categories' %}" class="nav__link">Catégories</a></li>
+
+                  <li><a href="{% url 'Etat' %}" class="nav__link"> États Traités</a></li>
+
+                  <!-- Conditional display for admin -->
+                  {% if request.session.role == 'admin' %}
+                  <li><a href="{% url 'users_list' %}" class="nav__link">Gestion des comptes</a></li>
+                  {% endif %}
+
+                  <li><a href="{% url 'logout' %}" class="nav__link">Déconnexion</a></li>
+               </ul>
+            </div>
+         </nav>
+      </header>
+
+      <!--=============== MAIN JS ===============-->
+      <script src="{% static 'js/main.js' %}"></script>
+
+        {% block content %}
+        {%  endblock %}
+        <script src="" async defer></script>
+   </body>
+</html>
+
+
+
+
+
+

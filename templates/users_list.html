@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block content %}
+
+<style>
+    .container2 {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    table, th, td {
+        border: 1px solid #dddddd;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .aa {
+        background-color: #28a745;
+        color: white;
+        padding: 5px 10px;
+        text-decoration: none;
+        border-radius: 3px;
+    }
+
+    .aa:hover {
+        background-color: #218838;
+    }
+
+    form {
+        display: inline;
+    }
+
+    #confirmation-dialog {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid #cccccc;
+        z-index: 1000;
+        text-align: center;
+        border-radius: 5px;
+    }
+
+    #confirmation-dialog p {
+        margin-bottom: 20px;
+    }
+
+    #confirmation-dialog button {
+        margin: 5px;
+    }
+</style>
+<br><br><br><br><br><br>
+
+<div class="container2">
+    <h1>Liste des utilisateurs</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom d'utilisateur</th>
+                <!-- <th>Rôle</th> -->
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            {% if user.role != 'admin' %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <!-- <td>{{ user.role }}</td> -->
+                <td>
+                    <a href="{% url 'edit_user' user.id %}" class="aa">Modifier</a>
+                    <form action="{% url 'delete_user' user.id %}" method="post" style="display:inline;" class="delete-form">
+                        {% csrf_token %}
+                        <button type="button" class="delete-button">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'add_user' %}" class="aa">Ajouter un nouvel utilisateur</a>
+
+    <!-- Confirmation Dialog -->
+    <div id="confirmation-dialog" style="display:none;">
+        <p>Êtes-vous sûr de vouloir supprimer cet utilisateur ?</p>
+        <button id="confirm-delete">Confirmer</button>
+        <button id="cancel-delete">Annuler</button>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteButtons = document.querySelectorAll('.delete-button');
+    const confirmationDialog = document.getElementById('confirmation-dialog');
+    let formToSubmit;
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            formToSubmit = this.closest('form');
+            confirmationDialog.style.display = 'block';
+        });
+    });
+
+    document.getElementById('confirm-delete').addEventListener('click', function() {
+        formToSubmit.submit();
+    });
+
+    document.getElementById('cancel-delete').addEventListener('click', function() {
+        confirmationDialog.style.display = 'none';
+        formToSubmit = null;
+    });
+});
+</script>
+
+{% endblock %}

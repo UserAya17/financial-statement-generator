@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Soumettre le nom de la collection{% endblock %}
+
+{% block content %}
+<style>
+    .container1 {
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333333;
+    }
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+    select, input[type="submit"] {
+        width: calc(100% - 24px);
+        padding: 12px;
+        margin-bottom: 20px;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 16px;
+    }
+    .btn-container1 {
+        text-align: center;
+    }
+    .btn {
+        padding: 12px 24px;
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+        background-color: #0056b3;
+    }
+    .new-state-link {
+        color: #007bff; /* Couleur du lien */
+        text-decoration: none; /* Supprimer le soulignement */
+        font-weight: bold; /* Rendre le texte en gras */
+        font-size: 16px; /* Taille de la police */
+        transition: color 0.3s ease; /* Transition de couleur fluide */
+    }
+    
+    .new-state-link:hover {
+        color: #0056b3; /* Couleur du lien au survol */
+    }
+    
+</style>
+<br><br><br><br><br><br>
+<div class="container1">
+    <h1>Vérifier les règles verticales</h1>
+    <form action="{% url 'postRegleVerticale' %}" method="post">
+        {% csrf_token %}
+        <label for="collection_name">Choisir la date d'arrêt de l'état comptable :</label>
+        <select id="collection_name" name="collection_name" required>
+            {% for collection in collections %}
+                <option value="{{ collection }}">{{ collection }}</option>
+            {% endfor %}
+        </select>
+        <div class="btn-container1">
+            <button type="submit" class="btn">Vérifier</button>
+        </div>
+        <br>
+        <a href="{% url 'remise' %}" class="new-state-link">Ajouter un nouvel état comptable</a>
+    </form>
+</div>
+{% endblock %}

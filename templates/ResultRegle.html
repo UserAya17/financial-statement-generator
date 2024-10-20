@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Résultats des Règles Verticales{% endblock %}
+
+{% block content %}
+<style>
+    .result-container1 {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .result-header1 {
+        text-align: center;
+        color: #333333;
+    }
+    .menu1 {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+    .menu1link1 {
+        margin: 0 15px;
+        text-decoration: none;
+        padding: 10px 20px;
+        border: 1px solid #007bff;
+        border-radius: 5px;
+        color: #007bff;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .menu1link1:hover {
+        background-color: #007bff;
+        color: #ffffff;
+    }
+    .result-section1 {
+        display: none;
+    }
+    .result-section1.active1 {
+        display: block;
+    }
+    .custom-list1 {
+        list-style-type: none;
+        padding: 0;
+    }
+    .custom-list-item1 {
+        background-color: #f9f9f9;
+        margin: 8px 0;
+        padding: 12px;
+        border-radius: 5px;
+        border: 1px solid #cccccc;
+    }
+    .custom-list-item1:nth-child(odd) {
+        background-color: #e9e9e9;
+    }
+</style>
+<br><br><br><br>
+
+<div class="result-container1">
+    <h1 class="result-header1">Résultats des Règles {{ Type }}</h1>
+    
+    <div class="menu1">
+        <a href="#" class="menu1link1" id="verified-link1">Règles Vérifiées</a>
+        <a href="#" class="menu1link1" id="unverified-link1">Règles Non Vérifiées</a>
+    </div>
+
+    <div id="verified-section1" class="result-section1 active1">
+        <h2>Règles Vérifiées</h2>
+        <ul class="custom-list1">
+            {% for regle in vrairule %}
+                <li class="custom-list-item1">{{ regle }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div id="unverified-section1" class="result-section1">
+        <h2>Règles Non Vérifiées</h2>
+        <ul class="custom-list1">
+            {% for regle in fausserule %}
+                <li class="custom-list-item1">{{ regle }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<script>
+    document.getElementById('verified-link1').addEventListener('click', function(event) {
+        event.preventDefault();
+        document.getElementById('verified-section1').classList.add('active1');
+        document.getElementById('unverified-section1').classList.remove('active1');
+    });
+
+    document.getElementById('unverified-link1').addEventListener('click', function(event) {
+        event.preventDefault();
+        document.getElementById('verified-section1').classList.remove('active1');
+        document.getElementById('unverified-section1').classList.add('active1');
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload Form{% endblock %}
+
+{% block content %}
+
+<style>
+    .body2 {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+    }
+    .h12 {
+        color: #333;
+    }
+    .form2 {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    .input2[type="file"] {
+        margin-bottom: 10px;
+    }
+    .button2 {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 16px;
+    }
+    .button2:hover {
+        background-color: #0056b3;
+    }
+    .button2:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+    }
+    .p2 {
+        color: #666;
+        margin-top: 20px;
+    }
+    .download-link2 {
+        display: block;
+        margin-top: 20px;
+        text-align: center;
+    }
+    .download-link2 a {
+        text-decoration: none;
+        color: #007bff;
+        transition: color 0.3s;
+    }
+    .download-link2 a:hover {
+        color: #0056b3;
+    }
+</style>
+
+<div class="body2">
+    {% if preview and nom %}
+    <!-- <p class="p2">{{ preview }}</p> -->
+    <p class="p2">nom : {{ preview }}</p>
+    <div class="download-link2">
+        <a href="{% url 'download_file1' filename=preview nomf=nom %}">Télécharger le fichier</a>
+    </div>
+    {% else %}
+    <p class="p2">Données insuffisantes pour générer le lien de téléchargement.</p>
+    <a href="{% url 'ComptreRendu' %}">Retour au compte rendu</a>
+    {% endif %}
+</div>
+
+{% endblock %}
